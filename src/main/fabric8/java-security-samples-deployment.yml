@@ -1,0 +1,68 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    fabric8.io/git-commit: 5f9666fba917780ce0b1a516a2192063b5e59ce9
+    fabric8.io/git-branch: master
+    fabric8.io/git-url: https://github.com/sibyg/java-security-samples.git
+    fabric8.io/scm-url: https://github.com/spring-projects/spring-boot/spring-boot-starter-parent/java-security-samples
+    fabric8.io/scm-tag: HEAD
+  labels:
+    app: java-security-samples
+    provider: fabric8
+    version: 1.0-SNAPSHOT
+    group: org.example
+  name: java-security-samples
+spec:
+  replicas: 1
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: java-security-samples
+      provider: fabric8
+      group: org.example
+  template:
+    metadata:
+      annotations:
+        fabric8.io/git-commit: 5f9666fba917780ce0b1a516a2192063b5e59ce9
+        fabric8.io/git-branch: master
+        fabric8.io/scm-tag: HEAD
+        fabric8.io/git-url: https://github.com/sibyg/java-security-samples.git
+        fabric8.io/scm-url: https://github.com/spring-projects/spring-boot/spring-boot-starter-parent/java-security-samples
+      labels:
+        app: java-security-samples
+        provider: fabric8
+        version: 1.0-SNAPSHOT
+        group: org.example
+    spec:
+      containers:
+      - env:
+        - name: FORM3_PUBLIC_KEY
+          valueFrom:
+            secretKeyRef:
+              name: form3-keys
+              key: public_key
+        - name: FORM3_PRIVATE_KEY
+          valueFrom:
+            secretKeyRef:
+              name: form3-keys
+              key: private_key
+        - name: KUBERNETES_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        image: example/java-security-samples:latest
+        imagePullPolicy: IfNotPresent
+        name: spring-boot
+        ports:
+        - containerPort: 8085
+          protocol: TCP
+        - containerPort: 9779
+          name: prometheus
+          protocol: TCP
+        - containerPort: 8778
+          name: jolokia
+          protocol: TCP
+        securityContext:
+          privileged: false

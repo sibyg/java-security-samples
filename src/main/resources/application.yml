@@ -1,0 +1,11 @@
+server:
+  servlet:
+    contextPath: /security-samples
+  port: 8085
+spring:
+  devtools:
+    remote:
+      secret: 0f35d84f-a3db-42ee-b78a-6d9dd27245ed
+form3:
+  public_key: ${FORM3_PUBLIC_KEY}
+  private_key: ${FORM3_PRIVATE_KEY}
