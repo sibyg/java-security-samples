@@ -7,5 +7,9 @@ spring:
     remote:
       secret: 0f35d84f-a3db-42ee-b78a-6d9dd27245ed
 form3:
+#  sample of using kubernetes secrets as ENV VARIABLES
   public_key: ${FORM3_PUBLIC_KEY}
   private_key: ${FORM3_PRIVATE_KEY}
+#  sample of using kubernetes secrets as files
+  public_key_location: @form3.dir@/public_key.pem
+  private_key_location: @form3.dir@/private_key.pem

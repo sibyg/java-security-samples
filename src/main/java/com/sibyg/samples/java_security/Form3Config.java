@@ -8,4 +8,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class Form3Config {
     private String publicKey;
     private String privateKey;
+    private String publicKeyLocation;
+    private String privateKeyLocation;
 }

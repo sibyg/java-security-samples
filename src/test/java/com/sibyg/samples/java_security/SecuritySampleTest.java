@@ -1,5 +1,6 @@
 package com.sibyg.samples.java_security;
 
+import static com.sibyg.samples.java_security.util.FileUtil.readFileToString;
 import static com.sibyg.samples.java_security.util.PemUtil.privateKey;
 import static com.sibyg.samples.java_security.util.PemUtil.publicKey;
 import static com.sibyg.samples.java_security.util.PemUtil.rsaKeyFactoryFromBouncyCastle;
@@ -8,9 +9,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.MessageDigest;
@@ -24,7 +22,6 @@ import java.util.Arrays;
 import javax.xml.bind.DatatypeConverter;
 
 import com.sibyg.samples.java_security.util.PemUtil;
-import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,7 +71,7 @@ public class SecuritySampleTest {
     @Test
     public void shouldLoadPrivateKey() throws Exception {
         // when
-        PrivateKey privateKey = privateKey(readFileToString("private_key.pem"), rsaKeyFactoryFromBouncyCastle());
+        PrivateKey privateKey = privateKey(readFileToString("form3/private_key.pem").get(), rsaKeyFactoryFromBouncyCastle());
         LOGGER.info(String.format("Instantiated private key: %s", privateKey));
         // and
         assertNotNull(privateKey);
@@ -83,7 +80,7 @@ public class SecuritySampleTest {
     @Test
     public void shouldLoadPublicKey() throws Exception {
         // when
-        PublicKey publicKey = PemUtil.publicKey(readFileToString("public_key.pem"), rsaKeyFactoryFromBouncyCastle());
+        PublicKey publicKey = PemUtil.publicKey(readFileToString("form3/public_key.pem").get(), rsaKeyFactoryFromBouncyCastle());
         LOGGER.info(String.format("Instantiated public key: %s", publicKey));
 
         // and
@@ -99,7 +96,7 @@ public class SecuritySampleTest {
         Signature sha256withRSASignature = sha256withRSASignature();
 
         // and initializing the object with a private key
-        sha256withRSASignature.initSign(privateKey(readFileToString("private_key.pem"), rsaKeyFactoryFromBouncyCastle()));
+        sha256withRSASignature.initSign(privateKey(readFileToString("form3/private_key.pem").get(), rsaKeyFactoryFromBouncyCastle()));
 
         // and update and sign the data
         sha256withRSASignature.update(data.getBytes());
@@ -118,7 +115,7 @@ public class SecuritySampleTest {
         Signature sha256withRSASignature = sha256withRSASignature();
 
         // and initializing the object with a private key
-        sha256withRSASignature.initSign(privateKey(readFileToString("private_key.pem"), rsaKeyFactoryFromBouncyCastle()));
+        sha256withRSASignature.initSign(privateKey(readFileToString("form3/private_key.pem").get(), rsaKeyFactoryFromBouncyCastle()));
 
         // and update and sign the data
         sha256withRSASignature.update(data.getBytes());
@@ -126,19 +123,13 @@ public class SecuritySampleTest {
 
         // when
         // initializing the object with the public key
-        sha256withRSASignature.initVerify(publicKey(readFileToString("public_key.pem"), rsaKeyFactoryFromBouncyCastle()));
+        sha256withRSASignature.initVerify(publicKey(readFileToString("form3/public_key.pem").get(), rsaKeyFactoryFromBouncyCastle()));
 
         // and, update and verify the data */
         sha256withRSASignature.update(data.getBytes());
 
         // then
         assertTrue(sha256withRSASignature.verify(signature));
-    }
-
-    private String readFileToString(String filename) throws IOException {
-        return FileUtils.readFileToString(
-                new File(getClass().getClassLoader().getResource(filename).getFile()),
-                Charset.defaultCharset());
     }
 
 

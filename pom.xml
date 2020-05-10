@@ -13,11 +13,12 @@
 
     <groupId>org.example</groupId>
     <artifactId>java-security-samples</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <form3.dir>/form3</form3.dir>
     </properties>
 
     <dependencies>
